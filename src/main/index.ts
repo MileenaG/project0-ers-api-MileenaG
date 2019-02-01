@@ -1,8 +1,8 @@
-import express, { NextFunction } from 'express';
-import bodyParser from 'body-parser';
+//import * as express from 'express'
+import express = require('express')
+import * as bodyParser from 'body-parser';
 import { userRouter } from './routers/users.router';
-//import { pokemonRouter } from './routers/pokemon.router';
-import session from 'express-session';
+import * as session from 'express-session';
 import { authRouter } from './routers/auth.router';
 
 const app = express();
@@ -27,11 +27,11 @@ const sess = {
 // prior to this req.sesssion is nothing
 // after this req.session is an object we can store
 // any user data we want on
-app.use(session(sess));
+//app.use(session(sess));
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
-app.use('/pokemon', pokemonRouter);
+//app.use('/pokemon', pokemonRouter);
 
 // app.get('/users', (req, res) => {
 //   res.send('here are your users');
@@ -46,10 +46,10 @@ app.use('/pokemon', pokemonRouter);
 // app.get('/pokemon', (req, res) => {
 //   res.send('here are your pokemon');
 // })
-
+/* 
 app.get('/pokemon-moves', (req, res) => {
   res.send('here are all the available pokemon moves');
 });
-
+ */
 app.listen(3000);
 console.log('application started on port: 3000');
