@@ -1,9 +1,8 @@
-//import * as express from 'express'
 import express = require('express')
-import * as bodyParser from 'body-parser';
+import bodyParser from 'body-parser';
 import { userRouter } from './routers/users.router';
-import * as session from 'express-session';
-import { authRouter } from './routers/auth.router';
+import session from 'express-session'; //why do we need session?
+import { authRouter } from './routers/login.router';
 
 const app = express();
 
@@ -27,21 +26,21 @@ const sess = {
 // prior to this req.sesssion is nothing
 // after this req.session is an object we can store
 // any user data we want on
-//app.use(session(sess));
+app.use(session(sess));
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
-//app.use('/pokemon', pokemonRouter);
 
-// app.get('/users', (req, res) => {
-//   res.send('here are your users');
-// })
 
-// app.post('/users', (req, res) => {
-//   const user = req.body;
-//   console.log(user)
-//   res.sendStatus(201);
-// })
+app.get('/users', (req, res) => {
+   res.send('here are your users');
+})
+
+app.post('/users', (req, res) => {
+  const user = req.body;
+  console.log(user)
+   res.sendStatus(201);
+})
 
 // app.get('/pokemon', (req, res) => {
 //   res.send('here are your pokemon');

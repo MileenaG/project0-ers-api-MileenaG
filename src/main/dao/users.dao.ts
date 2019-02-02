@@ -1,152 +1,47 @@
 import { User } from '../models/users';
 import { connectionPool } from '../utilities/connection-utilities';
+import { userInfo } from 'os';
 
-const pool = require('../data')
-import * as express from 'express';//have to import express before creating router
-const userRouter = express.Router();
-
-const router= require('../routers/usersRouter')
-
-//////////////////////
-
-
- export function loginUser (request, response) {
-
-
-   const name=request.param('username');
-   const ppswd=request.param('password');
-
-
-   let login= 'SELECT * FROM users WHERE username = $1 AND pass_word= $2';
-   pool.query(login, [name,ppswd], (error, results) => {
-     if (error) {
-         response.status(400)
-       throw "Invalid Credentials"
-
-     }
-
-     let stringr=`${JSON.stringify(results.rows[0],name)}`;
-     let object=JSON.parse(stringr);
-        //create session user
-
-
-     let newUser= {
-       id: object.user_id,
-       username: object.username,
-       password: '', // don't send back the passwords
-       firstName: object.firstname,
-       lastName: object.lastname,
-       email:object.email,
-       role:object.role_
-
-     };
-   console.log(newUser);
-     //response.status(200);
-     response.json(newUser);
-
-
-   })
- }
-
-
-///////////////////////
-
-export function getUsers(request, response) {
-
-
-   pool.query('SELECT * FROM users ORDER BY user_id ASC', (error, results) => {
-     if (error) {
-       throw "Access Denied"
-     }
-     response.status(200).json(results.rows)
-   })
-
- }
-/////////////////////////
-export function getUsersById(request, response) {
-
-     const id = parseInt(request.params.id)
-
-   pool.query('SELECT * FROM users WHERE user_id = $1', [id], (error, results) => {
-     if (error) {
-       throw error
-     }
-     response.status(200).json(results.rows)
-   })
-
- }
-////////////////////////////
-export function updateUser(request, response){
-   const ID=parseInt(request.param('user_id'));
-   const userName=request.param('username');
-   const ppswd=request.param('pass_word');
-   const firstName=request.param('firstname');
-   const LastName=request.param('lastname');
-   const userEmail=request.param('email');
-   const role=request.param('role_');
-
- pool.query(
-   'UPDATE users SET username = $1, pass_word = $2, firstName = $3, lastName = $4, email = $5, role_ = $6 WHERE user_id = $7',
-   [userName, ppswd, firstName, LastName, userEmail, role, ID],
-   (error, results) => {
-     if (error) {
-       throw error
-     }
-     let stringr=`${JSON.stringify(results.rows[0],name)}`;
-     let object=JSON.parse(stringr);
-     response.status(200);
-     response.json(object);
-   }
- )
-
-}
-/////////////////////////
-
-module.exports={
- getUsers : getUsers,
- getUsersById : getUsersById,
- updateUser: updateUser,
- loginUser: loginUser
-};
-
-
-
-
-
-/* export async function findAll(): Promise<User[]> {
+//Here are all of the SQL function 
+//find all of the users
+export async function findAll(): Promise<User[]> {
   const client = await connectionPool.connect();
+  
+  
   try {
     const result = await client.query(
-      'SELECT * FROM users'
+      'SELECT * FROM users;'
     );
     return result.rows.map(sqlUser => {
-      return {
-        userId: sqlUser['user_id'],
-        username: sqlUser.username,
-        password: '', // don't send back the passwords
-        firstName: sqlUser.firstName,
-        lastName: sqlUser.lastName,
-        email: sqlUser.email, // not null
-        role: sqlUser.role,
+      let newuser = new User(); 
+      newuser.userId = sqlUser.userid, //left obj in models, right incoming from DB
+      newuser.username = sqlUser.username,
+      newuser.password = '', // don't send back the passwords
+      newuser.firstName = sqlUser.firstname,
+      newuser.lastName =sqlUser.lastname,
+      newuser.email = sqlUser.email // not null
+      newuser.role = sqlUser.role,
+      console.log(newuser);
+      return newuser;
 
-      };
     });
   } finally {
     client.release(); // release connection
   }
 }
 
+//find by ID
 export async function findById(userId: number): Promise<User> {
   const client = await connectionPool.connect();
   try {
     const result = await client.query(
-      'SELECT * FROM users WHERE user_id = $1',
+      'SELECT * FROM users WHERE userid = $1;',
       [userId]
     );
     const sqlUser = result.rows[0]; // there should only be 1 record
     if (sqlUser) {
-      return {
-        userId: sqlUser['user_id'],
+      return { //are these the names of the columns in sql
+        userId: sqlUser.userId,
         username: sqlUser.username,
         password: '', // don't send back the passwords
         firstName: sqlUser.firstName,
@@ -163,17 +58,18 @@ export async function findById(userId: number): Promise<User> {
   }
 }
 
+//adding new user into table
 export async function save(user: User): Promise<User> {
   const client = await connectionPool.connect();
   try {
     const result = await client.query(
       `INSERT INTO users (username, password, name)
         VALUES  ($1, $2, $3)
-        RETURNING user_id`,
+        RETURNING userid;`,
       [user.username, user.password, user.firstName, user.lastName, user.email, user.role]
     );
     if (result.rows[0]) {
-      const id = result.rows[0].user_id;
+      const id = result.rows[0].userid;
       return {
         ...user,
         userId: id
@@ -185,4 +81,31 @@ export async function save(user: User): Promise<User> {
   } finally {
     client.release(); // release connection
   }
-} */
+} 
+
+//getting everything for login function inside user router
+export async function login(username: string , password: string): Promise<User[]> {
+  const client = await connectionPool.connect();
+  
+  try {
+    const result = await client.query(
+      'SELECT * FROM users WHERE username = $1 AND password = $2;',
+      [username, password]
+    );
+    return result.rows.map(sqlUser => {
+      let newuser = new User(); 
+      newuser.userId = sqlUser.userid, //left obj in models, right incoming from DB
+      newuser.username = sqlUser.username,
+      newuser.password = '', // don't send back the passwords
+      newuser.firstName = sqlUser.firstname,
+      newuser.lastName =sqlUser.lastname,
+      newuser.email = sqlUser.email // not null
+      newuser.role = sqlUser.role,
+      console.log(newuser);
+      return newuser;
+
+    });
+  } finally {
+    client.release(); // release connection
+  }
+}

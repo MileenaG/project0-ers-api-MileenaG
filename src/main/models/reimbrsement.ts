@@ -9,7 +9,7 @@ export class reimbursement {
  	status: number; // foreign ey -> ReimbursementStatus, not null
 	type: number // foreign key -> ReimbursementType
 	
-	constructor(reimbursementId=0, author=0, amount=0, dateSubmitted=0, dateResolved=0, description='', resolver=0,status=0,types=0) {
+/* 	constructor(reimbursementId=0, author=0, amount=0, dateSubmitted=0, dateResolved=0, description='', resolver=0,status=0,types=0) {
 		this.reimbursementId = reimbursementId,
 		this.author = author,
 		this.amount = amount,
@@ -19,6 +19,6 @@ export class reimbursement {
 		this.resolver = resolver,
 		this.status = status,
 		this.type = types
-	}
+	} */
 
 }

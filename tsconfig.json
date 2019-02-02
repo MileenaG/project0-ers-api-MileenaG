@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-      "lib": ["es2018", "dom", "es6", "ES2015","es7"],
-      "module": ["commonjs", "es6"],
+      //"lib": ["es2018", "dom", "es6", "ES2015","es7"],
+      "module": "commonjs",
       "esModuleInterop": true,
-      "target": ["es6" ,"es7","es5"],
+      "target": "es6",
     "noImplicitAny": false,
       "moduleResolution": "node",
       "allowSyntheticDefaultImports": true,
