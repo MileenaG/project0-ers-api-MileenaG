@@ -7,21 +7,34 @@ import { authMiddleware } from '../middleware/auth.middleware';
 // start with '/users'
 export const userRouter = express.Router();
 
-//users - find all
+/* //users - find all
 userRouter.get('', [
-  authMiddleware,  //what is this middleware doing? 
-                  //I have to put cridentials into postman or else I can't access users (just by id)
   async (req, res) => {
-    // res.json(users);
     try {
-      const users = await UserDao.findAll();
-      console.log('In user router');
-      console.log(users);
+      let users = await UserDao.findAll();
       res.json(users);
     } catch (err) {
       res.sendStatus(500);
     }
-  }]);
+  }]); */
+
+
+
+userRouter.get('', [
+    authMiddleware,  //what is this middleware doing? 
+    //I have to put cridentials into postman or else I can't access users (just by id)
+    async (req, res) => {
+      console.log('back to router');
+      try {
+        const users = await UserDao.findAll();
+        console.log('In user router');
+        console.log(users);
+        res.json(users);
+      } catch (err) {
+        res.sendStatus(500);
+      }
+    }]); 
+
 
 // /users/:id - find by id
 userRouter.get('/:id', [

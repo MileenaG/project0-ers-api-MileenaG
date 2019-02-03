@@ -28,7 +28,7 @@ const sess = {
 // any user data we want on
 app.use(session(sess));
 
-app.use('/auth', authRouter);
+app.use('/login', authRouter);
 app.use('/users', userRouter);
 
 

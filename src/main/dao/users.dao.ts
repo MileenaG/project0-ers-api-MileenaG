@@ -84,27 +84,15 @@ export async function save(user: User): Promise<User> {
 } 
 
 //getting everything for login function inside user router
-export async function login(username: string , password: string): Promise<User[]> {
+export async function login(username: string , password: string): Promise<User> {
   const client = await connectionPool.connect();
-  
   try {
-    const result = await client.query(
-      'SELECT * FROM users WHERE username = $1 AND password = $2;',
+      let result = await client.query(
+      'SELECT * FROM "users" WHERE username = $1 AND "password" = $2;',
       [username, password]
     );
-    return result.rows.map(sqlUser => {
-      let newuser = new User(); 
-      newuser.userId = sqlUser.userid, //left obj in models, right incoming from DB
-      newuser.username = sqlUser.username,
-      newuser.password = '', // don't send back the passwords
-      newuser.firstName = sqlUser.firstname,
-      newuser.lastName =sqlUser.lastname,
-      newuser.email = sqlUser.email // not null
-      newuser.role = sqlUser.role,
-      console.log(newuser);
-      return newuser;
-
-    });
+    let resultrows = result.rows[0];
+    return resultrows;
   } finally {
     client.release(); // release connection
   }

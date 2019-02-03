@@ -1,10 +1,10 @@
 export function authMiddleware(req, res, next) {
-  const user = req.session.user; //empty 
-  console.log(user)
-  if (user && user.role === 'Admin') {
+  const user =  req.session.user; 
+  
+  if (user.role === 1 || user.role === 2) {
     next();
+
   } else {
     res.sendStatus(401);
-    console.log('Accesss Denied');
   }
 }
