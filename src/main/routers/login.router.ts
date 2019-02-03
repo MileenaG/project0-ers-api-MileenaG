@@ -35,8 +35,3 @@ authRouter.post('',
             }
 
     });
-
-
-authRouter.get('/info', (req, res) => {
-  res.json(req.session.user);
-});

@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { userRouter } from './routers/users.router';
 import session from 'express-session'; //why do we need session?
 import { authRouter } from './routers/login.router';
+import { riemRouter } from './routers/reimbrsement.router';
 
 const app = express();
 
@@ -30,8 +31,9 @@ app.use(session(sess));
 
 app.use('/login', authRouter);
 app.use('/users', userRouter);
+app.use('/reimbursements', riemRouter);
 
-
+//I have no idea what this does?
 app.get('/users', (req, res) => {
    res.send('here are your users');
 })
@@ -42,13 +44,6 @@ app.post('/users', (req, res) => {
    res.sendStatus(201);
 })
 
-// app.get('/pokemon', (req, res) => {
-//   res.send('here are your pokemon');
-// })
-/* 
-app.get('/pokemon-moves', (req, res) => {
-  res.send('here are all the available pokemon moves');
-});
- */
+//This is the port we're using
 app.listen(3000);
 console.log('application started on port: 3000');

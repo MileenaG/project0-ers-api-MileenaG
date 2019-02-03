@@ -1,3 +1,6 @@
+//delete this one once connected to AWS in connection-utilties file
+
+
 //configures session and allows us to connect to the database
 import { Pool } from 'pg';
 

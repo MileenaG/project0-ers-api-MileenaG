@@ -1,34 +1,16 @@
 import express from 'express';
-//import { User } from '../models/users';
 import * as UserDao from '../dao/users.dao';
 import { authMiddleware } from '../middleware/auth.middleware';
 
-// we will assume all routes defined with this router
 // start with '/users'
 export const userRouter = express.Router();
 
-/* //users - find all
+//users - find all
 userRouter.get('', [
-  async (req, res) => {
-    try {
-      let users = await UserDao.findAll();
-      res.json(users);
-    } catch (err) {
-      res.sendStatus(500);
-    }
-  }]); */
-
-
-
-userRouter.get('', [
-    authMiddleware,  //what is this middleware doing? 
-    //I have to put cridentials into postman or else I can't access users (just by id)
+    authMiddleware,
     async (req, res) => {
-      console.log('back to router');
       try {
         const users = await UserDao.findAll();
-        console.log('In user router');
-        console.log(users);
         res.json(users);
       } catch (err) {
         res.sendStatus(500);
@@ -39,12 +21,9 @@ userRouter.get('', [
 // /users/:id - find by id
 userRouter.get('/:id', [
   authMiddleware,
-
   async (req, res) => {
     console.log(req.params);
     const idParam = +req.params.id;
-  // +'1' - will convert to number
-  // const user = users.find(ele => ele.id === idParam);
     try {
       const user = await UserDao.findById(idParam);
       res.json(user);
@@ -54,7 +33,7 @@ userRouter.get('/:id', [
   }
 }]);
 
-//add new user
+//add new user -- update user
 userRouter.post('', async (req, res) => {
   // users.push(req.body);
   try {

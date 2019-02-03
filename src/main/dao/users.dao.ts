@@ -1,13 +1,25 @@
 import { User } from '../models/users';
 import { connectionPool } from '../utilities/connection-utilities';
-import { userInfo } from 'os';
+//import { userInfo } from 'os';
 
-//Here are all of the SQL function 
-//find all of the users
+//getting everything for login function inside user router
+export async function login(username: string , password: string): Promise<User> {
+  const client = await connectionPool.connect();
+  try {
+      let result = await client.query(
+      'SELECT * FROM "users" WHERE username = $1 AND "password" = $2;',
+      [username, password]
+    );
+    let resultrows = result.rows[0];
+    return resultrows;
+  } finally {
+    client.release(); // release connection
+  }
+}
+
+//find all users
 export async function findAll(): Promise<User[]> {
   const client = await connectionPool.connect();
-  
-  
   try {
     const result = await client.query(
       'SELECT * FROM users;'
@@ -23,7 +35,6 @@ export async function findAll(): Promise<User[]> {
       newuser.role = sqlUser.role,
       console.log(newuser);
       return newuser;
-
     });
   } finally {
     client.release(); // release connection
@@ -48,7 +59,6 @@ export async function findById(userId: number): Promise<User> {
         lastName: sqlUser.lastName,
         email: sqlUser.email,
         role: sqlUser.role
-
       };
     } else {
       return undefined;
@@ -58,7 +68,7 @@ export async function findById(userId: number): Promise<User> {
   }
 }
 
-//adding new user into table
+//adding new user into table -- I think i want to change this to just update user
 export async function save(user: User): Promise<User> {
   const client = await connectionPool.connect();
   try {
@@ -82,18 +92,3 @@ export async function save(user: User): Promise<User> {
     client.release(); // release connection
   }
 } 
-
-//getting everything for login function inside user router
-export async function login(username: string , password: string): Promise<User> {
-  const client = await connectionPool.connect();
-  try {
-      let result = await client.query(
-      'SELECT * FROM "users" WHERE username = $1 AND "password" = $2;',
-      [username, password]
-    );
-    let resultrows = result.rows[0];
-    return resultrows;
-  } finally {
-    client.release(); // release connection
-  }
-}
