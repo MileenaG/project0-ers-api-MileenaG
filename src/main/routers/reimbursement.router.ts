@@ -7,7 +7,7 @@ export const reimRouter = express.Router();
 
 //find by status
 reimRouter.get('/status/:statusId', [
-    authMiddleware,     //Do I want it to go through middleware? 
+    authMiddleware, 
     async (req, res) => {
       const idParam = +req.params.statusId
       try {
@@ -34,7 +34,7 @@ reimRouter.get('/author/userId/:userId', [
 
 
 //submit reimbursements
-/* reimRouter.post('', async (req, res) => {
+reimRouter.post('', async (req, res) => {
   try {
     const reimbursement = await ReimDao.submitReim(req.body);
     res.status(200);
@@ -43,8 +43,7 @@ reimRouter.get('/author/userId/:userId', [
     console.log(err);
     res.sendStatus(500);
   }
-}); */
-
+});
 
 //update reimbursements
 reimRouter.patch('/', [
