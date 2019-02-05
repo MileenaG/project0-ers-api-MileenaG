@@ -1,8 +1,7 @@
 import { User } from '../models/users';
 import { connectionPool } from '../utilities/connection-utilities';
-//import { userInfo } from 'os';
 
-//getting everything for login function inside user router
+//login
 export async function login(username: string , password: string): Promise<User> {
   const client = await connectionPool.connect();
   try {
@@ -49,9 +48,9 @@ export async function findById(userid: number): Promise<User> {
       'SELECT * FROM users WHERE userid = $1;',
       [userid]
     );
-    const sqlUser = result.rows[0]; // there should only be 1 record
+    const sqlUser = result.rows[0];
     if (sqlUser) {
-      return { //are these the names of the columns in sql
+      return { 
         userid: sqlUser.userid,
         username: sqlUser.username,
         password: '', // don't send back the passwords
@@ -75,7 +74,6 @@ export async function update(user): Promise<User> {
     
     let sqlUser = await findById(user.userid);
       console.log('The user is:\n', sqlUser);
-      //let sqlUser = getOrig;
       let newuser = new User(); 
         newuser.userid = sqlUser['userid'], 
         newuser.username =  user.username || sqlUser['username'],

@@ -1,9 +1,9 @@
 import express = require('express')
 import bodyParser from 'body-parser';
 import { userRouter } from './routers/users.router';
-import session from 'express-session'; //why do we need session?
+import session from 'express-session';
 import { authRouter } from './routers/login.router';
-import { riemRouter } from './routers/reimbrsement.router';
+import { reimRouter } from './routers/reimbursement.router';
 
 const app = express();
 
@@ -31,18 +31,7 @@ app.use(session(sess));
 
 app.use('/login', authRouter);
 app.use('/users', userRouter);
-app.use('/reimbursements', riemRouter);
-
-//I have no idea what this does?
-app.get('/users', (req, res) => {
-   res.send('here are your users');
-})
-
-app.post('/users', (req, res) => {
-  const user = req.body;
-  console.log(user)
-   res.sendStatus(201);
-})
+app.use('/reimbursements', reimRouter);
 
 //This is the port we're using
 app.listen(3000);

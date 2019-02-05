@@ -36,7 +36,7 @@ userRouter.get('/:id', [
 
 //update user
 userRouter.patch('/', [
-  adminMiddleware, //fix auth! only admin!
+  adminMiddleware, 
   async (req, res) => {
   try {
     console.log('We send this to the dao', req.body);
@@ -48,16 +48,3 @@ userRouter.patch('/', [
     res.sendStatus(500);
   }
 }]);
-
-//add new user -- update user
-/* userRouter.post('', async (req, res) => {
-  // users.push(req.body);
-  try {
-    const user = await UserDao.save(req.body);
-    res.status(201);
-    res.json(user);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-}); */

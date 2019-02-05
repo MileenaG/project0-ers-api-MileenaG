@@ -1,9 +1,9 @@
 export class reimbursement {
- 	reimbursementId: number; // primary key
+ 	reimbursementid: number; // primary key
 	author: number;  // foreign key -> User, not null
 	amount: number;  // not null
- 	dateSubmitted: number; // not null
- 	dateResolved: number; // not null
+ 	datesubmitted: number; // not null
+ 	dateresolved: number; // not null
  	description: string; // not null
  	resolver: number; // foreign key -> User
  	status: number; // foreign ey -> ReimbursementStatus, not null

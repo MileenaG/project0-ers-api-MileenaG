@@ -1,4 +1,4 @@
-import { reimbursement } from '../models/reimbrsement';
+import { reimbursement } from '../models/reimbursement';
 import { connectionPool } from '../utilities/connection-utilities';
 
 //gets all reimbursements--might not need this function
@@ -69,6 +69,79 @@ import { connectionPool } from '../utilities/connection-utilities';
 
 //submit reimbursements 
 
+export async function submitReim(): Promise<reimbursement[]> {
+  const client = await connectionPool.connect();
+  try {
+    const result = await client.query(
+      `INSERT INTO reimbursement(author, amount, datesubmitted, dateresolved, description, resolver, status, "type") 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
+      [author, amount, datesubmitted, dateresolved, description, resolver, status, type]
+    );
+    const 
+  } finally {
+    client.release();
+  }
 
-//update reimbursements
+//------update reimbursements--------
 
+//find reimbursements by id
+export async function findById(reimbursementid: number): Promise<reimbursement> {
+  const client = await connectionPool.connect();
+  try {
+    const result = await client.query(
+      'SELECT * FROM reimbursement WHERE reimbursementid = $1;',
+      [reimbursementid]
+    );
+    const sqlReim = result.rows[0];
+    if (sqlReim) {
+      return { 
+        reimbursementid: sqlReim.reimbursementid,
+        author: sqlReim.author,
+        amount: sqlReim.amount, 
+        datesubmitted: sqlReim.datesubmitted,
+        dateresolved: sqlReim.dateresolved,
+        description: sqlReim.description,
+        resolver: sqlReim.resolver,
+        status: sqlReim.status,
+        type: sqlReim.type
+      };
+    } else {
+      return undefined;
+    }
+  } finally {
+    client.release(); // release connection
+  }
+}
+
+export async function update(reimbrsement): Promise<reimbursement> {
+  const client = await connectionPool.connect();
+  try {
+    
+    let sql = await findById(reimbrsement.reimbursementid);
+      console.log('The reimbursement is:\n', sql);
+      let newreim = new reimbursement(); 
+        newreim.reimbursementid = sql['reimbursementid'], 
+        newreim.author =  newreim.author || sql['author'],
+        newreim.amount = newreim.amount || sql['amount'], 
+        newreim.datesubmitted = newreim.datesubmitted || sql['datesubmitted'],
+        newreim.dateresolved = newreim.dateresolved || sql['dateresolved'],
+        newreim.description = newreim.description || sql['description'],// not null
+        newreim.resolver = newreim.resolver || sql['resolver'],
+        newreim.status = newreim.status || sql['status'],
+        newreim.type = newreim.type || sql['type'],
+        console.log('The new reimbursement will be:\n', newreim);
+        const result = await client.query(
+          `UPDATE reimbursement
+          SET  author = $2, amount = $3, datesubmitted = $4, dateresolved = $5, description = $6, resolver = $7, status = $8, type = $9
+          WHERE reimbursementid = $1 RETURNING *;`,
+          [newreim.reimbursementid, newreim.author, newreim.amount, newreim.datesubmitted, newreim.dateresolved, newreim.description, newreim.resolver, newreim.status, newreim.type])
+          if (result.rows[0]) {  
+            return result.rows[0];
+        }
+    else {
+      return undefined;
+    }
+  } finally {
+    client.release(); // release connection
+  }
+} 
