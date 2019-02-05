@@ -1,4 +1,4 @@
-import { reimbursement } from '../models/reimbursement';
+import { Reimbursement } from '../models/reimbursement';
 import { connectionPool } from '../utilities/connection-utilities';
 
 //gets all reimbursements--might not need this function
@@ -29,7 +29,7 @@ import { connectionPool } from '../utilities/connection-utilities';
 
   
   //find by status
-  export async function findByStatus(status: number): Promise<reimbursement[]> {
+  export async function findByStatus(status: number): Promise<Reimbursement[]> {
     const client = await connectionPool.connect();
     try {
       const result = await client.query(
@@ -48,7 +48,7 @@ import { connectionPool } from '../utilities/connection-utilities';
   }
   
    //find by user
-  export async function findByUser(author: number): Promise<reimbursement[]> {
+  export async function findByUser(author: number): Promise<Reimbursement[]> {
     const client = await connectionPool.connect();
     try {
       const result = await client.query(
@@ -69,7 +69,7 @@ import { connectionPool } from '../utilities/connection-utilities';
 
 //submit reimbursements 
 
-export async function submitReim(): Promise<reimbursement[]> {
+/* export async function submitReim(): Promise<reimbursement[]> {
   const client = await connectionPool.connect();
   try {
     const result = await client.query(
@@ -81,11 +81,11 @@ export async function submitReim(): Promise<reimbursement[]> {
   } finally {
     client.release();
   }
-
+ */
 //------update reimbursements--------
 
 //find reimbursements by id
-export async function findById(reimbursementid: number): Promise<reimbursement> {
+export async function findById(reimbursementid: number): Promise<Reimbursement> {
   const client = await connectionPool.connect();
   try {
     const result = await client.query(
@@ -113,22 +113,23 @@ export async function findById(reimbursementid: number): Promise<reimbursement> 
   }
 }
 
-export async function update(reimbrsement): Promise<reimbursement> {
+export async function update(reimbrsement): Promise<Reimbursement> {
   const client = await connectionPool.connect();
   try {
     
     let sql = await findById(reimbrsement.reimbursementid);
       console.log('The reimbursement is:\n', sql);
-      let newreim = new reimbursement(); 
+      let newreim = new Reimbursement(); 
+      console.log('This is the new reimbursement:' + newreim); //null compare values from postman
         newreim.reimbursementid = sql['reimbursementid'], 
-        newreim.author =  newreim.author || sql['author'],
-        newreim.amount = newreim.amount || sql['amount'], 
-        newreim.datesubmitted = newreim.datesubmitted || sql['datesubmitted'],
-        newreim.dateresolved = newreim.dateresolved || sql['dateresolved'],
-        newreim.description = newreim.description || sql['description'],// not null
-        newreim.resolver = newreim.resolver || sql['resolver'],
-        newreim.status = newreim.status || sql['status'],
-        newreim.type = newreim.type || sql['type'],
+        newreim.author =  reimbrsement.author || sql['author'],
+        newreim.amount = reimbrsement.amount || sql['amount'], 
+        newreim.datesubmitted = reimbrsement.datesubmitted || sql['datesubmitted'],
+        newreim.dateresolved = reimbrsement.dateresolved || sql['dateresolved'],
+        newreim.description = reimbrsement.description || sql['description'],// not null
+        newreim.resolver = reimbrsement.resolver || sql['resolver'],
+        newreim.status = reimbrsement.status || sql['status'],
+        newreim.type = reimbrsement.type || sql['type'],
         console.log('The new reimbursement will be:\n', newreim);
         const result = await client.query(
           `UPDATE reimbursement

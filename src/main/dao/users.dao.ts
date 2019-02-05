@@ -75,13 +75,14 @@ export async function update(user): Promise<User> {
     let sqlUser = await findById(user.userid);
       console.log('The user is:\n', sqlUser);
       let newuser = new User(); 
+      console.log('This is the new user ' + newuser);
         newuser.userid = sqlUser['userid'], 
         newuser.username =  user.username || sqlUser['username'],
         newuser.password = '', 
         newuser.firstname = user.firstname || sqlUser['firstname'],
-        newuser.lastname = newuser.lastname || sqlUser['lastname'],
-        newuser.email = newuser.email || sqlUser['email'],// not null
-        newuser.role = newuser.role || sqlUser['role'],
+        newuser.lastname = user.lastname || sqlUser['lastname'],
+        newuser.email = user.email || sqlUser['email'],// not null
+        newuser.role = user.role || sqlUser['role'],
         console.log('The new user will be:\n', newuser);
         const result = await client.query(
           `UPDATE users
