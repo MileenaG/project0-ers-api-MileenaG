@@ -26,11 +26,11 @@ export async function findAll(): Promise<User[]> {
     );
     return result.rows.map(sqlUser => {
       let newuser = new User(); 
-      newuser.userId = sqlUser.userid, //left obj in models, right incoming from DB
+      newuser.userid = sqlUser.userid, //left obj in models, right incoming from DB
       newuser.username = sqlUser.username,
       newuser.password = '', // don't send back the passwords
-      newuser.firstName = sqlUser.firstname,
-      newuser.lastName =sqlUser.lastname,
+      newuser.firstname = sqlUser.firstname,
+      newuser.lastname =sqlUser.lastname,
       newuser.email = sqlUser.email // not null
       newuser.role = sqlUser.role,
       console.log(newuser);
@@ -42,21 +42,21 @@ export async function findAll(): Promise<User[]> {
 }
 
 //find by ID
-export async function findById(userId: number): Promise<User> {
+export async function findById(userid: number): Promise<User> {
   const client = await connectionPool.connect();
   try {
     const result = await client.query(
       'SELECT * FROM users WHERE userid = $1;',
-      [userId]
+      [userid]
     );
     const sqlUser = result.rows[0]; // there should only be 1 record
     if (sqlUser) {
       return { //are these the names of the columns in sql
-        userId: sqlUser.userId,
+        userid: sqlUser.userid,
         username: sqlUser.username,
         password: '', // don't send back the passwords
-        firstName: sqlUser.firstName,
-        lastName: sqlUser.lastName,
+        firstname: sqlUser.firstname,
+        lastname: sqlUser.lastname,
         email: sqlUser.email,
         role: sqlUser.role
       };
@@ -68,26 +68,34 @@ export async function findById(userId: number): Promise<User> {
   }
 }
 
-//adding new user into table -- I think i want to change this to just update user
-export async function save(user: User): Promise<User> {
+//update user
+export async function update(user): Promise<User> {
   const client = await connectionPool.connect();
   try {
-    const result = await client.query(
-      `INSERT INTO users (username, password, name)
-        VALUES  ($1, $2, $3)
-        RETURNING userid;`,
-      [user.username, user.password, user.firstName, user.lastName, user.email, user.role]
-    );
-    if (result.rows[0]) {
-      const id = result.rows[0].userid;
-      return {
-        ...user,
-        userId: id
-      };
-    } else {
+    
+    let sqlUser = await findById(user.userid);
+      console.log('The user is:\n', sqlUser);
+      //let sqlUser = getOrig;
+      let newuser = new User(); 
+        newuser.userid = sqlUser['userid'], 
+        newuser.username =  user.username || sqlUser['username'],
+        newuser.password = '', 
+        newuser.firstname = user.firstname || sqlUser['firstname'],
+        newuser.lastname = newuser.lastname || sqlUser['lastname'],
+        newuser.email = newuser.email || sqlUser['email'],// not null
+        newuser.role = newuser.role || sqlUser['role'],
+        console.log('The new user will be:\n', newuser);
+        const result = await client.query(
+          `UPDATE users
+          SET username = $2, "password" = $3, firstname = $4, lastname = $5, email = $6, "role" = $7
+          WHERE userid = $1 RETURNING *;`,
+          [newuser.userid, newuser.username, newuser.password, newuser.firstname, newuser.lastname, newuser.email, newuser.role])
+          if (result.rows[0]) {  
+            return result.rows[0];
+        }
+    else {
       return undefined;
     }
-
   } finally {
     client.release(); // release connection
   }

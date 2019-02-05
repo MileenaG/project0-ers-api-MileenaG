@@ -1,12 +1,13 @@
 export function authMiddleware(req, res, next) {
-  const user =  req.session.user; 
-  if (user.role === 1 || user.role === 2) { //must be admin or financial manager
-     //don't forget to add if ID matches current user
+  let user =  req.session.user; 
+  console.log('Middleware ' + user.userid);
+  if (user.userid === +req.params.id) {
+    console.log('User Id = req Id')
      next();
-  } else {
-    res.sendStatus(401)//.json({
-      //status: 401,
-      //message: 'UNAUTHORIZED'
-    //});
-  }
+  } else if(user && user.role === 1 || user.role === 2){
+    next();
+    }
+    else {
+    res.sendStatus(401)
+    }
 }

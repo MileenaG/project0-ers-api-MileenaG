@@ -1,9 +1,9 @@
 export class User {
-  	userId: number; // primary key
+  	userid: number; // primary key
 	username: string; // not null, unique
 	password: string; // not null
-	firstName: string; // not null
-	lastName: string; // not null
+	firstname: string; // not null
+	lastname: string; // not null
 	email: string; // not null
 	role: number; // not null
 } 
