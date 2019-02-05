@@ -6,7 +6,9 @@ import { connectionPool } from '../utilities/connection-utilities';
     const client = await connectionPool.connect();
     try {
       const result = await client.query(
-        'SELECT * FROM reimbursement WHERE status = $1;',
+        `SELECT * FROM reimbursement 
+        WHERE status = $1
+        ORDER BY datesumitted ASC;`,
         [status]
       );
       if (result.rows) {
@@ -25,7 +27,9 @@ import { connectionPool } from '../utilities/connection-utilities';
     const client = await connectionPool.connect();
     try {
       const result = await client.query(
-        'SELECT * FROM reimbursement WHERE author = $1;', //order by
+        `SELECT * FROM reimbursement 
+        WHERE author = $1
+        ORDER BY datesubmitted ASC;`,
         [author]
       );
       if (result.rows) {
@@ -41,7 +45,6 @@ import { connectionPool } from '../utilities/connection-utilities';
   
 
 //submit reimbursements 
-
  export async function submitReim(reimbursement): Promise<Reimbursement> {
   const client = await connectionPool.connect();
   try {
@@ -65,13 +68,13 @@ import { connectionPool } from '../utilities/connection-utilities';
 }
 
 //------update reimbursements--------
-
 //find reimbursements by id
 export async function findById(reimbursementid: number): Promise<Reimbursement> {
   const client = await connectionPool.connect();
   try {
     const result = await client.query(
-      'SELECT * FROM reimbursement WHERE reimbursementid = $1;',
+      `SELECT * FROM reimbursement 
+      WHERE reimbursementid = $1;`,
       [reimbursementid]
     );
     const sqlReim = result.rows[0];
@@ -95,7 +98,7 @@ export async function findById(reimbursementid: number): Promise<Reimbursement> 
   }
 }
 
-//update
+//update reimbursement
 export async function update(reimbursement): Promise<Reimbursement> {
   const client = await connectionPool.connect();
   try {

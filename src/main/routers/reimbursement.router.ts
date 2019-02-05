@@ -37,11 +37,11 @@ reimRouter.get('/author/userId/:userId', [
 reimRouter.post('', async (req, res) => {
   try {
     const reimbursement = await ReimDao.submitReim(req.body);
-    res.status(200);
-    res.json(reimbursement);
+    res.status(201);
+    res.json(reimbursement);  //want to display CREATED REIMBUREMENT in postman
   } catch (err) {
     console.log(err);
-    res.sendStatus(500);
+    res.sendStatus(500); 
   }
 });
 
