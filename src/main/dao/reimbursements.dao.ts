@@ -50,7 +50,8 @@ import { connectionPool } from '../utilities/connection-utilities';
   try {
     const result = await client.query(
       `INSERT INTO reimbursement(author, amount, datesubmitted, dateresolved, description, resolver, status, "type") 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING *;`,
       [reimbursement.author, reimbursement.amount, reimbursement.datesubmitted, reimbursement.dateresolved, reimbursement.description, reimbursement.resolver, reimbursement.status, reimbursement.type]
     );
     if (result.rows[0]) {
