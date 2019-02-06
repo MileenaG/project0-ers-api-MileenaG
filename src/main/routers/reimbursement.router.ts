@@ -20,10 +20,10 @@ reimRouter.get('/status/:statusId', [
 
 
 // find by user ID /reimbursements/author/userId/:userId
-reimRouter.get('/author/userId/:userId', [
+reimRouter.get('/author/userId/:id', [
   authMiddleware,
   async (req, res) => {
-    const idParam = +req.params.userId;
+    const idParam = +req.params.id;
     try {
       const reimbursement = await ReimDao.findByUser(idParam);
       res.json(reimbursement);
@@ -38,7 +38,7 @@ reimRouter.post('', async (req, res) => {
   try {
     const reimbursement = await ReimDao.submitReim(req.body);
     res.status(201);
-    res.json(reimbursement);  //want to display CREATED REIMBUREMENT in postman
+    res.json(reimbursement); 
   } catch (err) {
     console.log(err);
     res.sendStatus(500); 

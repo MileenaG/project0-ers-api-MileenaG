@@ -8,7 +8,7 @@ import { connectionPool } from '../utilities/connection-utilities';
       const result = await client.query(
         `SELECT * FROM reimbursement 
         WHERE status = $1
-        ORDER BY datesumitted ASC;`,
+        ORDER BY datesubmitted DESC;`,
         [status]
       );
       if (result.rows) {
@@ -29,7 +29,7 @@ import { connectionPool } from '../utilities/connection-utilities';
       const result = await client.query(
         `SELECT * FROM reimbursement 
         WHERE author = $1
-        ORDER BY datesubmitted ASC;`,
+        ORDER BY datesubmitted DESC;`,
         [author]
       );
       if (result.rows) {
