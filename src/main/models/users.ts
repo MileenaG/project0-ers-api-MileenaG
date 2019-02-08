@@ -1,3 +1,5 @@
+import { Role } from './role';
+
 export class User {
   	userid: number; // primary key
 	username: string; // not null, unique
@@ -5,5 +7,5 @@ export class User {
 	firstname: string; // not null
 	lastname: string; // not null
 	email: string; // not null
-	role: number; // not null
+	role: number;//Role; //number; // not null
 } 

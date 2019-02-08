@@ -7,7 +7,7 @@ import { reimRouter } from './routers/reimbursement.router';
 
 const app = express();
 
-// s  et up body parser to convert json body to js object and attach to req
+// set up body parser to convert json body to js object and attach to req
 app.use(bodyParser.json());
 
 // create logging middleware

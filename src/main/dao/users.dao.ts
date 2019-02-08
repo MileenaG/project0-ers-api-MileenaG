@@ -1,51 +1,53 @@
 import { User } from '../models/users';
 import { connectionPool } from '../utilities/connection-utilities';
+import { Role } from '../models/role';
 
 //login
 export async function login(username: string , password: string): Promise<User> {
   const client = await connectionPool.connect();
   try {
-      let result = await client.query(
+    let result = await client.query(
       'SELECT * FROM "users" WHERE username = $1 AND "password" = $2;',
       [username, password]
-    );
-    let resultrows = result.rows[0];
-    return resultrows;
-  } finally {
-    client.release(); // release connection
+      );
+      let resultrows = result.rows[0];
+      return resultrows;
+    } finally {
+      client.release(); // release connection
+    }
   }
-}
-
-//find all users
-export async function findAll(): Promise<User[]> {
-  const client = await connectionPool.connect();
-  try {
-    const result = await client.query(
-      'SELECT * FROM users;'
-    );
-    return result.rows.map(sqlUser => {
-      let newuser = new User(); 
-      newuser.userid = sqlUser.userid, //left obj in models, right incoming from DB
-      newuser.username = sqlUser.username,
-      newuser.password = '', // don't send back the passwords
-      newuser.firstname = sqlUser.firstname,
-      newuser.lastname =sqlUser.lastname,
-      newuser.email = sqlUser.email // not null
-      newuser.role = sqlUser.role,
-      console.log(newuser);
-      return newuser;
-    });
-  } finally {
-    client.release(); // release connection
-  }
-}
-
-//find by ID
-export async function findById(userid: number): Promise<User> {
-  const client = await connectionPool.connect();
-  try {
-    const result = await client.query(
-      'SELECT * FROM users WHERE userid = $1;',
+  
+  //find all users
+  export async function findAll(): Promise<User[]> {
+    const client = await connectionPool.connect();
+    try {
+      const result = await client.query(
+        'SELECT * FROM users;'
+        );
+        return result.rows.map(sqlUser => {
+          let newuser = new User(); 
+          newuser.userid = sqlUser.userid, //left obj in models, right incoming from DB
+          newuser.username = sqlUser.username,
+          newuser.password = '', // don't send back the passwords
+          newuser.firstname = sqlUser.firstname,
+          newuser.lastname =sqlUser.lastname,
+          newuser.email = sqlUser.email // not null
+          newuser.role = sqlUser.role,
+          console.log(newuser);
+          return newuser;
+        });
+      } finally {
+        client.release(); // release connection
+      }
+    }
+    
+    //find by ID
+    export async function findById(userid: number): Promise<User> {
+      console.log('role in dao: '+Role);
+      const client = await connectionPool.connect();
+      try {
+        const result = await client.query(
+      'SELECT * FROM users WHERE userid = $1;', //I could use joins!! for role
       [userid]
     );
     const sqlUser = result.rows[0];
@@ -53,7 +55,7 @@ export async function findById(userid: number): Promise<User> {
       return { 
         userid: sqlUser.userid,
         username: sqlUser.username,
-        password: '', // don't send back the passwords
+        password: '',
         firstname: sqlUser.firstname,
         lastname: sqlUser.lastname,
         email: sqlUser.email,
@@ -78,7 +80,7 @@ export async function update(user): Promise<User> {
       console.log('This is the new user ' + newuser);
         newuser.userid = sqlUser['userid'], 
         newuser.username =  user.username || sqlUser['username'],
-        newuser.password = '', 
+        newuser.password = sqlUser['password'], //fix this part! password goes back to sql as empty
         newuser.firstname = user.firstname || sqlUser['firstname'],
         newuser.lastname = user.lastname || sqlUser['lastname'],
         newuser.email = user.email || sqlUser['email'],// not null

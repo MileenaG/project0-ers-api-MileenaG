@@ -50,15 +50,16 @@ import { connectionPool } from '../utilities/connection-utilities';
   try {
     const result = await client.query(
       `INSERT INTO reimbursement(author, amount, datesubmitted, dateresolved, description, resolver, status, "type") 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING *;`,
-      [reimbursement.author, reimbursement.amount, reimbursement.datesubmitted, reimbursement.dateresolved, reimbursement.description, reimbursement.resolver, reimbursement.status, reimbursement.type]
-    );
-    if (result.rows[0]) {
-      const id = result.rows[0].reimbursementid;
+      VALUES ($1, $2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $3, $4, 1, $5)
+      RETURNING *;`, //figure out what to do with the date resolved: should I make it an empty string? or zero?
+      [reimbursement.author, reimbursement.amount, reimbursement.description, reimbursement.resolver, reimbursement.type]
+    ); const newSQLreim = result.rows[0]; //I want reimbursement author to = req.params.id
+    console.log('In DAO '+ newSQLreim);
+    if (newSQLreim) {
+      const id = newSQLreim.reimbursementid;
       return {
-        ...reimbursement,
-        id: id
+        ...newSQLreim,
+        reimbursementid: id
       };
     } else {
       return undefined;
@@ -100,6 +101,7 @@ export async function findById(reimbursementid: number): Promise<Reimbursement> 
 }
 
 //update reimbursement
+//try and figure out a way to combine code above with code below--less lines
 export async function update(reimbursement): Promise<Reimbursement> {
   const client = await connectionPool.connect();
   try {
@@ -119,9 +121,9 @@ export async function update(reimbursement): Promise<Reimbursement> {
         console.log('The new reimbursement will be:\n', newreim);
         let result = await client.query(
           `UPDATE reimbursement
-          SET  author = $2, amount = $3, datesubmitted = $4, dateresolved = $5, description = $6, resolver = $7, status = $8, type = $9
+          SET  dateresolved = CURRENT_TIMESTAMP, resolver = $2, status = $3, type = $4
           WHERE reimbursementid = $1 RETURNING *;`,
-          [newreim.reimbursementid, newreim.author, newreim.amount, newreim.datesubmitted, newreim.dateresolved, newreim.description, newreim.resolver, newreim.status, newreim.type]
+          [newreim.reimbursementid, newreim.resolver, newreim.status, newreim.type]//shouldnt need type. what is resolver? person that resolved the reimbursement?
           )
           if (result.rows[0]) {  
             return result.rows[0];
