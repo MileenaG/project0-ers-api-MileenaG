@@ -1,6 +1,7 @@
 import { Role } from './role';
 
 export class User {
+	
   	userid: number; // primary key
 	username: string; // not null, unique
 	password: string; // not null

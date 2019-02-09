@@ -4,9 +4,9 @@ import { authMiddleware } from '../middleware/auth.middleware';
 
 
 export const reimRouter = express.Router();
-
+//add reimbursements in front of all path for UI
 //find by status
-reimRouter.get('/status/:statusId', [
+reimRouter.get('reimbursements/status/:statusId', [
     authMiddleware, 
     async (req, res) => {
       const idParam = +req.params.statusId
@@ -20,7 +20,7 @@ reimRouter.get('/status/:statusId', [
 
 
 // find by user ID /reimbursements/author/userId/:userId
-reimRouter.get('/author/userId/:id', [
+reimRouter.get('reimbursements/author/userId/:id', [
   authMiddleware,
   async (req, res) => {
     const idParam = +req.params.id;

@@ -1,0 +1,25 @@
+#restaurant-table-container {
+    margin-top: 1.5em;
+  }
+  
+  #restaurant-table-body > tr:hover {
+    cursor: pointer;
+    -webkit-box-shadow: inset 0px 0px 32px 0px rgb(64, 65, 71);
+  -moz-box-shadow: inset 0px 0px 32px 0px rgba(64, 65, 71);
+  box-shadow: inset 0px 0px 32px 0px rgba(64, 65, 71);
+  }
+  
+  .gradient-background {
+    background: #0f0353; /* Old browsers */
+  background: -moz-linear-gradient(left, rgba(59,209,0,0.1), rgba(59,209,0,0.5), rgba(59,209,0,0.8) ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, rgba(59,209,0,0.1),rgba(59,209,0,0.5),rgba(59,209,0,0.8)); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, rgba(59,209,0,0.1),rgba(59,209,0,0.5),rgba(59,209,0,0.8)); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bfd255', endColorstr='#72aa00',GradientType=1 );
+  }
+  
+  .delete-button:hover {
+    -webkit-box-shadow: inset 0px 0px 32px 0px #d1003b;
+  -moz-box-shadow: inset 0px 0px 32px 0px #d1003b;
+  box-shadow: inset 0px 0px 32px 0px #d1003b;
+  cursor: not-allowed;
+  }

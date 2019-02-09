@@ -5,16 +5,26 @@ import { Role } from '../models/role';
 //login
 export async function login(username: string , password: string): Promise<User> {
   const client = await connectionPool.connect();
+    console.log("im at the login daos this is the " + username+ "hi")
   try {
     let result = await client.query(
-      'SELECT * FROM "users" WHERE username = $1 AND "password" = $2;',
+      'SELECT * FROM "users" WHERE username = $1 AND "password" = $2 ;',
       [username, password]
       );
       let resultrows = result.rows[0];
+      
+      //result.rows is undefined and not returning anything
+      
+      
+      
       return resultrows;
+      
     } finally {
+      console.log("done")
       client.release(); // release connection
     }
+
+    console.log("this is login")
   }
   
   //find all users

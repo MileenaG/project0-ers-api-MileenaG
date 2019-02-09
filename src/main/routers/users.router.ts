@@ -7,7 +7,7 @@ import { adminMiddleware } from '../middleware/admin.middleware';
 export const userRouter = express.Router();
 
 //users - find all
-userRouter.get('', [
+userRouter.get('/users', [
     authMiddleware,
     async (req, res) => {
       try {
@@ -20,7 +20,7 @@ userRouter.get('', [
 
 
 // /users/:id - find by id
-userRouter.get('/:id', [
+userRouter.get('users/:id', [
   authMiddleware,
   async (req, res) => {
     console.log(req.params);
@@ -33,7 +33,7 @@ userRouter.get('/:id', [
       res.sendStatus(500);
   }
 }]);
-
+//maybe need to add users in front of path
 //update user
 userRouter.patch('/', [
   adminMiddleware, 

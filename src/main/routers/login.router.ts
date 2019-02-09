@@ -1,11 +1,12 @@
 import express from 'express'
 import * as UserDao from '../dao/users.dao';
 
-export const authRouter = express.Router();
+export const loginRouter = express.Router();
 
-authRouter.post('', 
-    async (req, res) => {
+loginRouter.post('', 
+    async  (req, res) => {
         try { 
+            console.log("at the router")
             const user = await UserDao.login(req.body.username, req.body.password);
             console.log(user);
         
@@ -21,9 +22,9 @@ authRouter.post('',
                     email: user.email,
                     role: user.role
                 }
-
+        console.log("this is the  new guy" + newuser);
             req.session.user = newuser;
-            console.log(req.session.user); 
+            //console.log(req.session.user.role); 
             res.json(user);
             } else {
                 res.send('Invalid Cridentials'); //client side error
