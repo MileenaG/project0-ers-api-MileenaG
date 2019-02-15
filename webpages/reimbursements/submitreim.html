@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Jekyll v3.8.5">
+  <title>Submit Reimbrsement</title>
+
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+
+  <style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+  <!-- Custom styles for this template -->
+<link href="../login/login.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+  <nav class="navbar navbar-expand-md navbar-light fixed-top">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarsExample04">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="../homepage/home.html">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/users">View Users </a>
+          </li>
+          <li class="nav-item active">
+              <a class="nav-link" href="/reimbursements">Reimbursements</a>
+            </li>
+            
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container" id="users-table-container">
+  <form class="form-signin" onsubmit="submittedReim(event)">
+    <label for="inputAuthor" class="sr-only">Author</label>
+    <input type="text" id="inputAuthor" class="form-control" placeholder="User Id" required autofocus>
+
+    <label for="inputAmount" class="sr-only">Amount</label>
+    <input type="text" id="inputAmount" class="form-control" placeholder="Amount" required/>
+
+    <label for="inputDes" class="sr-only">description</label>
+    <input type="text" id="inputDes" class="form-control" placeholder="description" required/>
+    
+    <label for="inputRes" class="sr-only">Resolver</label>
+    <input type="text" id="inputRes" class="form-control" placeholder="Resolver" required/>
+    
+    <label for="inputType" class="sr-only">Type</label>
+    <input type="text" id="inputType" class="form-control" placeholder="Type" required/>
+    
+    <p id="error-message"></p>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit Changes</button>
+  </form>
+</body>
+  <script src="submitreim.js"></script>
+</html>

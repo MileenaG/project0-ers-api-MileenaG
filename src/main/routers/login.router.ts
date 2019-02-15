@@ -6,9 +6,9 @@ export const loginRouter = express.Router();
 loginRouter.post('', 
     async  (req, res) => {
         try { 
-            console.log("at the router")
+           // console.log("at the router")
             const user = await UserDao.login(req.body.username, req.body.password);
-            console.log(user);
+           // console.log(user);
         
             if (user !== undefined) {
                 user.password = '';

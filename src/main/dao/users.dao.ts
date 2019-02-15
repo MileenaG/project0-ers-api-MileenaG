@@ -41,9 +41,9 @@ export async function login(username: string , password: string): Promise<User> 
           newuser.password = '', // don't send back the passwords
           newuser.firstname = sqlUser.firstname,
           newuser.lastname =sqlUser.lastname,
-          newuser.email = sqlUser.email // not null
-          newuser.role = sqlUser.role,
-          console.log(newuser);
+          newuser.email = sqlUser.email, // not null
+          newuser.role = sqlUser.role
+        
           return newuser;
         });
       } finally {
@@ -54,7 +54,9 @@ export async function login(username: string , password: string): Promise<User> 
     //find by ID
     export async function findById(userid: number): Promise<User> {
       console.log('role in dao: '+Role);
-      const client = await connectionPool.connect();
+
+        
+          const client = await connectionPool.connect();
       try {
         const result = await client.query(
       'SELECT * FROM users WHERE userid = $1;', //I could use joins!! for role
@@ -89,12 +91,14 @@ export async function update(user): Promise<User> {
       let newuser = new User(); 
       console.log('This is the new user ' + newuser);
         newuser.userid = sqlUser['userid'], 
+
+        console.log( newuser.userid)
         newuser.username =  user.username || sqlUser['username'],
         newuser.password = sqlUser['password'], //fix this part! password goes back to sql as empty
         newuser.firstname = user.firstname || sqlUser['firstname'],
         newuser.lastname = user.lastname || sqlUser['lastname'],
         newuser.email = user.email || sqlUser['email'],// not null
-        newuser.role = user.role || sqlUser['role'],
+        newuser.role = parseInt(user.role) || sqlUser['role'], //Need this so it knows what "text" submitted in the form is a number not a string
         console.log('The new user will be:\n', newuser);
         const result = await client.query(
           `UPDATE users
@@ -102,6 +106,7 @@ export async function update(user): Promise<User> {
           WHERE userid = $1 RETURNING *;`,
           [newuser.userid, newuser.username, newuser.password, newuser.firstname, newuser.lastname, newuser.email, newuser.role])
           if (result.rows[0]) {  
+            
             return result.rows[0];
         }
     else {

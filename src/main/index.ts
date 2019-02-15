@@ -11,6 +11,7 @@ app.use((req, resp, next) => {
   resp.header('Access-Control-Allow-Origin', `http://localhost:3000`);
   resp.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   resp.header('Access-Control-Allow-Credentials', 'true');
+  resp.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
   next();
  })
 
@@ -18,7 +19,8 @@ app.use((req, resp, next) => {
  app.use('/login', express.static('webpages'));
  app.use('', express.static('webpages')); //homepage
  app.use('/users', express.static('webpages'));
-
+ app.use('/reimbursements', express.static( 'webpages'))
+ 
 // set up body parser to convert json body to js object and attach to req
 app.use(bodyParser.json());
 app.use(express.json());
@@ -57,30 +59,36 @@ app.use(session(sess));
 
    let  path = require('path');
    app.get('', async  function (req,res){ 
-    await res.sendFile(path.resolve('webpages/homepage/index.html') //also not set up yet
+    await res.sendFile(path.resolve('webpages/homepage/index.html') 
     )
   });
-  
-  
   app.get('/login', async function (req,res){ 
     await res.sendFile(path.resolve('webpages/login/login.html')
     )
   });
-  
-  //app.get('/reimbursements', async function (req,res){ 
-    //await res.sendFile(path.resolve('webpages/reim/reim.html')
-    //)
-  //});
-  app.get('/users', async function (req,res){ 
-    await res.sendFile(path.resolve('webpages/users/users.html')
-    )
+  app.get('/reimbursements', async function (req,res){ 
+    if (req.session.user.role === 1 || req.session.user.role === 2){
+    await res.sendFile(path.resolve('webpages/reimbursements/reimbursements.html')
+    )} else { console.log('Back in index before html');
+      await res.sendfile(path.resolve('webpages/reimbursements/singlereim.html'))
+    }
   });
+  app.get('/users', async function (req,res){ 
+    console.log('at index /users')
+    if(req.session.user.role === 1 || req.session.user.role === 2) {
+     
+      await res.sendFile(path.resolve('webpages/users/users.html') )  
+  } else {
+   
+    await res.sendFile(path.resolve('webpages/users/singleuser.html') )  
+    
+  }});
 app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/reimbursements', reimRouter);
+console.log("at the index")
 
 
-//app.use('/reimbursements', express.static( 'webpages')) //not set up yet
 
 
 

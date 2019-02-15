@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Jekyll v3.8.5">
+  <title>Users</title>
+
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+          }
+          @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+              font-size: 3.5rem;
+            }
+          }
+        </style>
+  <link rel="stylesheet" href="../login/login.css" />
+
+</head>
+
+
+<body class="text-center">
+  <nav class="navbar navbar-expand-md navbar-light gradient-background">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarsExample04">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="../homepage/home.html">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+          <!-- <a class="nav-link" href="#">Users</a> -->
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">Users</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown04">
+              <a class="dropdown-item" href="users.html">View User(s)</a> <!-- Do I need this href? -->
+              <a class="dropdown-item" href="updateusers.html">Update User</a> 
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">Reimbursements</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown04">
+            <a class="dropdown-item" href="../reimbursements/reimbursements.html">View Reimbursements</a>
+            <a class="dropdown-item" href="../reimbursements/submitreim.html">Submit Reimbursements</a>
+            <a class="dropdown-item" href="../reimbursements/updatereim.html">Approve/Deny Reimbursements</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+ <div class="container" id="users-table-container">
+  <form class="form-signin" onsubmit="update(event)"><!-- 
+    <img class="mb-4" src="/docs/4.2/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+   <!--  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1> -->
+    <label for="inputUserId" class="sr-only">User Id</label>
+    <input type="text" id="inputUserId" class="form-control" placeholder="User Id" required autofocus>
+
+    <label for="inputUsername" class="sr-only">Username</label>
+    <input type="text" id="inputUsername" class="form-control" placeholder="Username">
+
+    <!-- <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password">
+     -->
+    <label for="inputFirstName" class="sr-only">First Name</label>
+    <input type="text" id="inputFirstName" class="form-control" placeholder="First Name">
+    
+    <label for="inputLastName" class="sr-only">Last Name</label>
+    <input type="text" id="inputLastName" class="form-control" placeholder="Last Name">
+    
+    <label for="inputEmail" class="sr-only">Email</label>
+    <input type="text" id="inputEmail" class="form-control" placeholder="Email">
+    
+    <label for="inputRole" class="sr-only">Role</label>
+    <input type="text" id="inputRole" class="form-control" placeholder="Role">
+    
+    <p id="error-message"></p>
+    <!-- <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div> -->
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit Changes</button>
+  </form>
+</div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+  crossorigin="anonymous"></script>
+
+
+  <script src="updateusers.js"></script>
+</html>

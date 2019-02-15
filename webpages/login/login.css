@@ -4,6 +4,7 @@ body {
 }
 
 body {
+  background: url(../images/structure-3952312_1920.jpg) no-repeat center center fixed;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
@@ -41,4 +42,14 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.nav-textsize{
+  
+  font-size: 150%;
+  
+}
+
+.hover-over:hover{
+  background-color: rgb(187, 187, 187);
 }

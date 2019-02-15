@@ -18,7 +18,7 @@ async function login(event) {
     })
   
     if (res.status === 200) {
-      window.location = '../users/users.html'; //WTF where is this?? is this telling it where to go after a successful login?
+      window.location = '../homepage/home.html'; //WTF where is this?? is this telling it where to go after a successful login?
     } else {
       console.log('failed to login');
       document.getElementById('inputPassword').value = '';

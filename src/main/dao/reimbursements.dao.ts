@@ -1,6 +1,33 @@
 import { Reimbursement } from '../models/reimbursement';
 import { connectionPool } from '../utilities/connection-utilities';
  
+//find all reimbursements
+export async function findAllReim(): Promise<Reimbursement[]> {
+  const client = await connectionPool.connect();
+  try {
+    const result = await client.query(
+      `SELECT * FROM reimbursement;`
+      ); 
+      return result.rows.map(sqlReim => {
+        let newreim = new Reimbursement(); 
+        newreim.reimbursementid = sqlReim.reimbursementid, //left obj in models, right incoming from DB
+        newreim.amount = sqlReim.amount,
+        newreim.author = sqlReim.author,
+        newreim.datesubmitted = sqlReim.datesubmitted, // don't send back the passwords
+        newreim.dateresolved = sqlReim.dateresolved,
+        newreim.description =sqlReim.description,
+        newreim.resolver = sqlReim.resolver, // not null
+        newreim.status = sqlReim.status,
+        newreim.type = sqlReim.type
+      
+        return newreim;
+      });
+  } finally {
+      client.release(); // release connection
+    }
+  }
+
+
   //find by status
   export async function findByStatus(status: number): Promise<Reimbursement[]> {
     const client = await connectionPool.connect();
@@ -32,12 +59,20 @@ import { connectionPool } from '../utilities/connection-utilities';
         ORDER BY datesubmitted DESC;`,
         [author]
       );
-      if (result.rows) {
-        return result.rows;
-      } 
-      else {
-        return undefined;
-      }
+      return result.rows.map(sqlReim => {
+        let newreim = new Reimbursement(); 
+        newreim.reimbursementid = sqlReim.reimbursementid, //left obj in models, right incoming from DB
+        newreim.amount = sqlReim.amount,
+        newreim.author = sqlReim.author,
+        newreim.datesubmitted = sqlReim.datesubmitted, // don't send back the passwords
+        newreim.dateresolved = sqlReim.dateresolved,
+        newreim.description =sqlReim.description,
+        newreim.resolver = sqlReim.resolver, // not null
+        newreim.status = sqlReim.status,
+        newreim.type = sqlReim.type
+      
+        return newreim;
+      });
     } finally {
       client.release(); // release connection
     }
@@ -48,13 +83,19 @@ import { connectionPool } from '../utilities/connection-utilities';
  export async function submitReim(reimbursement): Promise<Reimbursement> {
   const client = await connectionPool.connect();
   try {
-    const result = await client.query(
+    /* 
+    let newreim = new Reimbursement(); 
+    newreim.author =  reimbursement.author || sql['author'],
+    newreim.amount = reimbursement.amount || sql['amount'], 
+    newreim.description = reimbursement.description || sql['description'],// not null
+    newreim.resolver = reimbursement.resolver || sql['resolver'],
+    newreim.type = reimbursement.type || sql['type']; */
+    const result = await client.query(      
       `INSERT INTO reimbursement(author, amount, datesubmitted, dateresolved, description, resolver, status, "type") 
-      VALUES ($1, $2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $3, $4, 1, $5)
-      RETURNING *;`, //figure out what to do with the date resolved: should I make it an empty string? or zero?
+      VALUES ($1, $2, CURRENT_DATE, CURRENT_DATE, $3, $4, 1, $5);`, //figure out what to do with the date resolved: should I make it an empty string? or zero?
       [reimbursement.author, reimbursement.amount, reimbursement.description, reimbursement.resolver, reimbursement.type]
     ); const newSQLreim = result.rows[0]; //I want reimbursement author to = req.params.id
-    console.log('In DAO '+ newSQLreim);
+    console.log('In DAO '+ reimbursement.author);
     if (newSQLreim) {
       const id = newSQLreim.reimbursementid;
       return {
@@ -68,6 +109,10 @@ import { connectionPool } from '../utilities/connection-utilities';
     client.release();
   }
 }
+
+
+
+
 
 //------update reimbursements--------
 //find reimbursements by id
